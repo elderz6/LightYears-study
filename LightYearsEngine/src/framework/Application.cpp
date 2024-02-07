@@ -1,13 +1,15 @@
 #include "framework/Application.h"
 #include "framework/Core.h"
+#include "framework/World.h"
 
 namespace ly
 {
 
 	Application::Application()
 		: m_window{ sf::VideoMode(800, 600), "LightYears" },
-		m_targetFrameRate{60},
-		m_tickClock{}
+		m_targetFrameRate{ 60 },
+		m_tickClock{},
+		currentWorld{nullptr}
 	{
 	}
 
@@ -31,7 +33,7 @@ namespace ly
 			}
 
 			accumulatedTime += m_tickClock.restart().asSeconds();
-			while (accumulatedTime > targetDeltaTime) 
+			while (accumulatedTime > targetDeltaTime)
 			{
 				accumulatedTime -= targetDeltaTime;
 				TickInternal(targetDeltaTime);
@@ -43,6 +45,11 @@ namespace ly
 	void Application::TickInternal(float deltaTime)
 	{
 		Tick(deltaTime);
+
+		if (currentWorld)
+		{
+			currentWorld->TickInternal(deltaTime);
+		}
 	}
 
 	void Application::RenderInternal()
@@ -65,7 +72,5 @@ namespace ly
 
 	void Application::Tick(float deltaTime)
 	{
-		//std::cout <<  << 1.f / deltaTime << std::endl;
-		LOG("Tick at framerate %f ", 1.f / deltaTime);
 	}
 }
