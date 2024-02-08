@@ -5,11 +5,11 @@
 namespace ly
 {
 
-	Application::Application()
-		: m_window{ sf::VideoMode(800, 600), "LightYears" },
+	Application::Application(unsigned int windowWidth, unsigned int windowHeight, const std::string& title, sf::Uint32 style)
+		: m_window{ sf::VideoMode(windowWidth, windowHeight), title, style },
 		m_targetFrameRate{ 60 },
 		m_tickClock{},
-		currentWorld{nullptr}
+		currentWorld{ nullptr }
 	{
 	}
 
@@ -63,11 +63,10 @@ namespace ly
 
 	void Application::Render()
 	{
-		sf::RectangleShape rect{ sf::Vector2f{100, 100} };
-		rect.setFillColor(sf::Color::Green);
-		rect.setOrigin(50, 50);
-		rect.setPosition(m_window.getSize().x / 2.f, m_window.getSize().y / 2.f);
-		m_window.draw(rect);
+		if (currentWorld)
+		{
+			currentWorld->Render(m_window);
+		}
 	}
 
 	void Application::Tick(float deltaTime)
