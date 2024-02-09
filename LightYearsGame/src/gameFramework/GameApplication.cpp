@@ -2,7 +2,9 @@
 #include "framework/World.h"
 #include "framework/Actor.h"
 #include "config.h"
-
+#include "spaceship/Spaceship.h"
+#include "framework/AssetManager.h"
+#include "player/PlayerSpaceship.h"
 
 ly::Application* GetApplication()
 {
@@ -14,15 +16,15 @@ namespace ly
 	GameApplication::GameApplication()
 		:Application{600, 900, "LightYears", sf::Style::Titlebar | sf::Style::Close}
 	{
+		AssetManager::Get().SetAssetRootDir(GetResourceDir());
 		weak<World> newWorld = LoadWorld<World>();
 		newWorld.lock()->SpawnActor<Actor>();
-		testPlayer = newWorld.lock()->SpawnActor<Actor>();
 
-		testPlayer.lock()->SetTexture(GetResourceDir() + "SpaceShooterRedux/PNG/playerblue.png");
+		testPlayer = newWorld.lock()->SpawnActor<PlayerSpaceship>();
 		testPlayer.lock()->SetActorLocation(sf::Vector2f(300.f, 480.f));
-		testPlayer.lock()->SetActorRotation(180.f);
-
-		m_counter = 0;
+		//testPlayer.lock()->SetActorRotation(180.f);
+		//testPlayer.lock()->SetVelocity(sf::Vector2f(0.f, -200.f));
+		//m_counter = 0;
 	}
 
 	void GameApplication::Tick(float deltaTime)

@@ -3,7 +3,7 @@
 
 namespace ly
 {
-	class Spaceship : Actor
+	class Spaceship : public Actor
 	{
 	public:
 		Spaceship(World* owningWorld, const std::string& texturePath = "");
