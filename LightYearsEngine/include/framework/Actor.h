@@ -19,7 +19,19 @@ namespace ly
 
 		void Render(sf::RenderWindow& window);
 
+		void SetActorLocation(const sf::Vector2f& newLocation);
+		void SetActorRotation(float newRot);
+		void AddActorLocationOffset(const sf::Vector2f& offsetAmt);
+		void AddActorRotationOffset(float offsetAmt);
+
+		sf::Vector2f GetActorLocation() const;
+		float GetActorRotation() const;
+
+		sf::Vector2f GetActorForwardDirection();
+		sf::Vector2f GetActorRightDirection();
+
 	private:
+		void CenterPivot();
 		World* m_owningWorld;
 		bool m_hasBeganPlay;
 
