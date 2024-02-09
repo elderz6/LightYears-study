@@ -3,6 +3,7 @@
 #include "framework/Actor.h"
 #include "config.h"
 
+
 ly::Application* GetApplication()
 {
 	return new ly::GameApplication{};
@@ -15,11 +16,11 @@ namespace ly
 	{
 		weak<World> newWorld = LoadWorld<World>();
 		newWorld.lock()->SpawnActor<Actor>();
-		actorToDestroy = newWorld.lock()->SpawnActor<Actor>();
+		testPlayer = newWorld.lock()->SpawnActor<Actor>();
 
-		actorToDestroy.lock()->SetTexture(GetResourceDir() + "SpaceShooterRedux/PNG/playerblue.png");
-		actorToDestroy.lock()->SetActorLocation(sf::Vector2f(300.f, 480.f));
-		actorToDestroy.lock()->SetActorRotation(180.f);
+		testPlayer.lock()->SetTexture(GetResourceDir() + "SpaceShooterRedux/PNG/playerblue.png");
+		testPlayer.lock()->SetActorLocation(sf::Vector2f(300.f, 480.f));
+		testPlayer.lock()->SetActorRotation(180.f);
 
 		m_counter = 0;
 	}
