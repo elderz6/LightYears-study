@@ -68,7 +68,6 @@ namespace ly
 
 	void World::BeginPlay()
 	{
-		LOG("Begin play")
 	}
 
 	void World::Tick(float deltaTime)

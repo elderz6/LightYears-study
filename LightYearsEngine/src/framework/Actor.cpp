@@ -39,7 +39,6 @@ namespace ly
 
 	void Actor::BeginPlay()
 	{
-		LOG("Begin play")
 	}
 
 	void Actor::Tick(float deltaTime)
@@ -113,6 +112,40 @@ namespace ly
 		return m_owningWorld->GetWindowSize();
 	}
 
+	sf::FloatRect Actor::GetActorGlobalBounds() const
+	{
+		return m_sprite.getGlobalBounds();
+	}
+
+
+	bool Actor::IsActorOOB() const
+	{
+		float windowWidth = GetWorld()->GetWindowSize().x;
+		float windowHeight = GetWorld()->GetWindowSize().y;
+
+		float width = GetActorGlobalBounds().width;
+		float height = GetActorGlobalBounds().height;
+
+		sf::Vector2f actorPosition = GetActorLocation();
+		
+		if (actorPosition.x < -width)
+		{
+			return true;
+		}
+		if (actorPosition.x > windowWidth + width)
+		{
+			return true;
+		}
+		if (actorPosition.y < -height)
+		{
+			return true;
+		}
+		if (actorPosition.y > windowHeight + height)
+		{
+			return true;
+		}
+		return false;
+	}
 
 	void Actor::CenterPivot()
 	{

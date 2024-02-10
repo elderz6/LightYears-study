@@ -22,7 +22,7 @@ namespace ly
 
 		testPlayer = newWorld.lock()->SpawnActor<PlayerSpaceship>();
 		testPlayer.lock()->SetActorLocation(sf::Vector2f(300.f, 480.f));
-		//testPlayer.lock()->SetActorRotation(180.f);
+		testPlayer.lock()->SetActorRotation(-90.f);
 		//testPlayer.lock()->SetVelocity(sf::Vector2f(0.f, -200.f));
 		//m_counter = 0;
 	}
