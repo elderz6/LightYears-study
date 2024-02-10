@@ -14,6 +14,7 @@ namespace ly
 		float GetSpeed() { return m_speed; };
 
 		virtual void Shoot() override;
+		virtual void BeginPlay() override;
 
 	private:
 		void HandleInput();

@@ -3,6 +3,7 @@
 #include "SFML/Graphics.hpp"
 #include "framework/Core.h"
 
+class b2Body;
 namespace ly
 {
 	class World;
@@ -30,19 +31,27 @@ namespace ly
 		sf::Vector2f GetActorForwardDirection();
 		sf::Vector2f GetActorRightDirection();
 		sf::Vector2u GetWindowSize() const;
-
 		sf::FloatRect GetActorGlobalBounds() const;
 
 		World* GetWorld() const { return m_owningWorld; };
-
 		bool IsActorOOB() const;
 
+		bool SetEnablePhysics(bool enable);
+		virtual void OnActorBeginOverlap(Actor* actor);
+		virtual void OnActorEndOverlap(Actor* actor);
+
 	private:
+		void InitializePhysics();
+		void UnInitializePhysics();
+		void UpdatePhysicsBodyTransform();
 		void CenterPivot();
 		World* m_owningWorld;
 		bool m_hasBeganPlay;
 
 		sf::Sprite m_sprite;
 		shared<sf::Texture> m_texture;
+
+		bool m_physicsEnabled;
+		b2Body* m_physicsBody;
 	};
 }

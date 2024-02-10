@@ -3,6 +3,8 @@
 #include "framework/AssetManager.h"
 #include "framework/MathUtility.h"
 #include "framework/World.h"
+#include "framework/PhysicsSystem.h"
+#include <box2d/b2_body.h>
 
 namespace ly
 {
@@ -10,7 +12,9 @@ namespace ly
 		: m_owningWorld{owningWorld},
 		m_hasBeganPlay{false},
 		m_sprite{},
-		m_texture{}
+		m_texture{},
+		m_physicsBody{nullptr},
+		m_physicsEnabled{false}
 	{
 		SetTexture(texturePath);
 	}
@@ -70,11 +74,13 @@ namespace ly
 	void Actor::SetActorLocation(const sf::Vector2f& newLocation)
 	{
 		m_sprite.setPosition(newLocation);
+		UpdatePhysicsBodyTransform();
 	}
 
 	void Actor::SetActorRotation(float newRot)
 	{
 		m_sprite.setRotation(newRot);
+		UpdatePhysicsBodyTransform();
 	}
 
 	void Actor::AddActorLocationOffset(const sf::Vector2f& offsetAmt)
@@ -145,6 +151,57 @@ namespace ly
 			return true;
 		}
 		return false;
+	}
+
+	bool Actor::SetEnablePhysics(bool enable)
+	{
+		m_physicsEnabled = enable;
+		if (m_physicsEnabled)
+		{
+			InitializePhysics();
+		}
+		else
+		{
+			UnInitializePhysics();
+		}
+		return m_physicsEnabled;
+	}
+
+	void Actor::OnActorBeginOverlap(Actor* actor)
+	{
+	}
+
+	void Actor::OnActorEndOverlap(Actor* actor)
+	{
+	}
+
+	void Actor::InitializePhysics()
+	{
+		if (!m_physicsBody)
+		{
+			m_physicsBody = PhysicsSystem::Get().AddListener(this);
+		}
+	}
+
+	void Actor::UnInitializePhysics()
+	{
+		if (m_physicsBody)
+		{
+			PhysicsSystem::Get().RemoveListener(m_physicsBody);
+		}
+	}
+
+	void Actor::UpdatePhysicsBodyTransform()
+	{
+		if (m_physicsBody)
+		{
+			float physicsScale = PhysicsSystem::Get().GetPhysicsScale();
+			b2Vec2 pos{ GetActorLocation().x * physicsScale,
+				GetActorLocation().y * physicsScale };
+			float rotation = DegreesToRadians(GetActorRotation());
+
+			m_physicsBody->SetTransform(pos, rotation);
+		}
 	}
 
 	void Actor::CenterPivot()
