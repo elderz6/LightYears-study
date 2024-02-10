@@ -45,6 +45,12 @@ namespace ly
 		}
 	}
 
+	sf::Vector2u Application::GetWindowSize() const
+	{
+		return m_window.getSize();
+	}
+
+
 	void Application::TickInternal(float deltaTime)
 	{
 		Tick(deltaTime);

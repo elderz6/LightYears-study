@@ -14,6 +14,8 @@ namespace ly
 
 	private:
 		void HandleInput();
+		void NormalizeInput();
+		void ClampInputOnEdge();
 		void ConsumeInput(float deltaTime);
 		sf::Vector2f m_moveInput;
 		float m_speed;
