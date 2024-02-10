@@ -6,7 +6,6 @@
 #include "framework/Actor.h"
 #include "framework/MathUtility.h"
 
-
 namespace ly
 {
 	unique<PhysicsSystem> PhysicsSystem::physicsSystem{ nullptr };
@@ -22,6 +21,7 @@ namespace ly
 
 	void PhysicsSystem::Step(float deltaTime)
 	{
+		ProcessPendingRemoveListeners();
 		m_physicsWorld.Step(deltaTime, m_velocityIterations, m_positionIterations);
 	}
 
@@ -59,7 +59,12 @@ namespace ly
 
 	void PhysicsSystem::RemoveListener(b2Body* body)
 	{
+		m_pendingRemoveListeners.insert(body);
+	}
 
+	void PhysicsSystem::Cleanup()
+	{
+		physicsSystem = std::move(unique<PhysicsSystem>{new PhysicsSystem});
 	}
 
 	PhysicsSystem::PhysicsSystem()
@@ -67,10 +72,20 @@ namespace ly
 		m_physicsScale{0.01f},
 		m_velocityIterations{8},
 		m_positionIterations{3},
-		m_contactListener{}
+		m_contactListener{},
+		m_pendingRemoveListeners{}
 	{
 		m_physicsWorld.SetContactListener(&m_contactListener);
 		m_physicsWorld.SetAllowSleeping(false);
+	}
+
+	void PhysicsSystem::ProcessPendingRemoveListeners()
+	{
+		for (auto listener : m_pendingRemoveListeners)
+		{
+			m_physicsWorld.DestroyBody(listener);
+		}
+		m_pendingRemoveListeners.clear();
 	}
 
 	void PhysicsContactListener::BeginContact(b2Contact* contact)

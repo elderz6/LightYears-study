@@ -40,6 +40,8 @@ namespace ly
 		virtual void OnActorBeginOverlap(Actor* actor);
 		virtual void OnActorEndOverlap(Actor* actor);
 
+		virtual void Destroy() override;
+
 	private:
 		void InitializePhysics();
 		void UnInitializePhysics();

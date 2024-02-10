@@ -16,6 +16,8 @@ namespace ly
 	GameApplication::GameApplication()
 		:Application{600, 900, "LightYears", sf::Style::Titlebar | sf::Style::Close}
 	{
+		m_counter = 0;
+
 		AssetManager::Get().SetAssetRootDir(GetResourceDir());
 		weak<World> newWorld = LoadWorld<World>();
 
@@ -27,17 +29,16 @@ namespace ly
 		testSpaceship.lock()->SetTexture("SpaceShooterRedux/PNG/playerShip1_red.png");
 		testSpaceship.lock()->SetActorLocation(sf::Vector2f{ 100.f, 50.f });
 		//testPlayer.lock()->SetVelocity(sf::Vector2f(0.f, -200.f));
-		//m_counter = 0;
 	}
 
 	void GameApplication::Tick(float deltaTime)
 	{
 		/*m_counter += deltaTime;
-		if (m_counter >= 2.f)
+		if (m_counter >= 10.f)
 		{
-			if (!actorToDestroy.expired())
+			if (!testPlayer.expired())
 			{
-				actorToDestroy.lock()->Destroy();
+				testPlayer.lock()->Destroy();
 			}
 		}*/
 	}
