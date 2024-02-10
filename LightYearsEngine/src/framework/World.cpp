@@ -7,7 +7,7 @@ namespace ly
 {
 	World::World(Application* owningApp)
 		: m_owningApp{ owningApp },
-		m_beginPlay{false},
+		m_beginPlay{ false },
 		m_actors{},
 		m_pendingActors{}
 	{
@@ -35,15 +35,8 @@ namespace ly
 
 		for (auto iter = m_actors.begin(); iter != m_actors.end();)
 		{
-			if (iter->get()->IsPendingDestroy())
-			{
-				iter = m_actors.erase(iter);
-			}
-			else
-			{
-				iter->get()->TickInternal(deltaTime);
-				++iter;
-			}
+			iter->get()->TickInternal(deltaTime);
+			++iter;
 		}
 
 		Tick(deltaTime);
@@ -64,6 +57,18 @@ namespace ly
 	sf::Vector2u World::GetWindowSize() const
 	{
 		return m_owningApp->GetWindowSize();
+	}
+
+	void World::CleanCycle()
+	{
+		for (auto iter = m_actors.begin(); iter != m_actors.end();)
+		{
+			if (iter->get()->IsPendingDestroy())
+			{
+				iter = m_actors.erase(iter);
+			}
+			else ++iter;
+		}
 	}
 
 	void World::BeginPlay()
