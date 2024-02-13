@@ -11,7 +11,7 @@ namespace ly
 		m_speed{200},
 		m_shooter{ new BulletShooter{this} }
 	{
-
+		SetTeamID(1);
 	}
 
 	void PlayerSpaceship::Tick(float deltaTime)
@@ -31,7 +31,7 @@ namespace ly
 
 	void PlayerSpaceship::BeginPlay()
 	{
-		Actor::BeginPlay();
+		Spaceship::BeginPlay();
 		SetEnablePhysics(true);
 	}
 

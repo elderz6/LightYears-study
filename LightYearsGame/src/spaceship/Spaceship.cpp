@@ -32,11 +32,25 @@ namespace ly
 
 		weak<Object> selfRef = GetWeakRef();
 		m_healthComp.onHealthChanged.BindAction(selfRef, &Spaceship::OnHealthChanged);
-		m_healthComp.onHealthChanged.Broadcast(10, 80, 100);
+		m_healthComp.onTakenDamage.BindAction(selfRef, &Spaceship::OnTakenDamage);
+		m_healthComp.onHealthEmpty.BindAction(selfRef, &Spaceship::Blow);
+	}
+
+	void Spaceship::ApplyDamage(float amt)
+	{
+		m_healthComp.ChangeHealth(-amt);
 	}
 
 	void Spaceship::OnHealthChanged(float amt, float health, float maxHealth)
 	{
-		LOG("amt %f health %f maxHealth %f", amt, health, maxHealth);
+	}
+
+	void Spaceship::OnTakenDamage(float amt, float health, float maxHealth)
+	{
+	}
+
+	void Spaceship::Blow()
+	{
+		Destroy();
 	}
 }

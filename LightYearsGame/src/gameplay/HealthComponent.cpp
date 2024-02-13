@@ -4,7 +4,7 @@
 namespace ly
 {
 	HealthComponent::HealthComponent(float healt, float maxHealth)
-		:m_healt{healt},
+		:m_health{healt},
 		m_maxHealth{maxHealth}
 	{
 	}
@@ -12,39 +12,33 @@ namespace ly
 	void HealthComponent::ChangeHealth(float amt)
 	{
 		if (amt == 0) return;
-		if (m_healt == 0) return;
+		if (m_health == 0) return;
 
-		m_healt += amt;
-		if (m_healt < 0) m_healt = 0;
-		if (m_healt > m_maxHealth) m_healt = m_maxHealth;
+		m_health += amt;
+		if (m_health < 0) m_health = 0;
+		if (m_health > m_maxHealth) m_health = m_maxHealth;
 
 		if (amt < 0)
 		{
 			TakenDamage(-amt);
-			if (m_healt <= 0)
+			if (m_health <= 0)
 			{
 				HealthEmpty();
 			}
 		}
-		else
-		{
-			HealthRegen(amt);
-		}
+
+		onHealthChanged.Broadcast(amt, m_health, m_maxHealth);
 
 	}
 
 	void HealthComponent::TakenDamage(float amt)
 	{
-		LOG("TOOK DAMAGE: %f, health is: %f/%f", amt, m_healt, m_maxHealth);
+		onTakenDamage.Broadcast(amt, m_health, m_maxHealth);
 	}
 
 	void HealthComponent::HealthEmpty()
 	{
-		LOG("Health Empty");
+		onHealthEmpty.Broadcast();
 	}
 
-	void HealthComponent::HealthRegen(float amt)
-	{
-		LOG("Health regen: %f, health is: %f/%f", amt, m_healt, m_maxHealth);
-	}
 }

@@ -24,7 +24,6 @@ namespace ly
 		void SetActorRotation(float newRot);
 		void AddActorLocationOffset(const sf::Vector2f& offsetAmt);
 		void AddActorRotationOffset(float offsetAmt);
-
 		sf::Vector2f GetActorLocation() const;
 		float GetActorRotation() const;
 
@@ -35,12 +34,17 @@ namespace ly
 
 		World* GetWorld() const { return m_owningWorld; };
 		bool IsActorOOB() const;
-
 		bool SetEnablePhysics(bool enable);
 		virtual void OnActorBeginOverlap(Actor* actor);
 		virtual void OnActorEndOverlap(Actor* actor);
-
 		virtual void Destroy() override;
+
+		static uint8 GetNeutralTeamID() { return neutralTeamID; };
+		void SetTeamID(uint8 teamID) { m_teamID = teamID; };
+		uint8 GetTeamId() const { return m_teamID; };
+		bool IsOtherHostile(Actor* other) const;
+
+		virtual void ApplyDamage(float amt);
 
 	private:
 		void InitializePhysics();
@@ -55,5 +59,9 @@ namespace ly
 
 		bool m_physicsEnabled;
 		b2Body* m_physicsBody;
+
+		uint8 m_teamID;
+
+		const static uint8 neutralTeamID = 255;
 	};
 }
