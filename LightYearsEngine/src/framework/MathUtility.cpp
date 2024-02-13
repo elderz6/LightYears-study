@@ -1,4 +1,5 @@
 #include "framework/MathUtility.h"
+#include <random>
 
 namespace ly
 {
@@ -43,5 +44,22 @@ namespace ly
 		float lerpX = LerpFloat(a.x, b.x, alpha);
 		float lerpY = LerpFloat(a.x, b.x, alpha);
 		return sf::Vector2f(lerpX, lerpY);
+	}
+
+	float RandomRange(float min, float max)
+	{
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_real_distribution<float> distribution(min, max);
+		return distribution(gen);
+	}
+
+	sf::Vector2f RandomUnitVector()
+	{
+		float randomX = RandomRange(-1, 1);
+		float randomY = RandomRange(-1, 1);
+		sf::Vector2f randomVector{ randomX, randomY };
+		Normalize(randomVector);
+		return randomVector;
 	}
 }
