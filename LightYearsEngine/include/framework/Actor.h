@@ -32,7 +32,9 @@ namespace ly
 		sf::Vector2u GetWindowSize() const;
 		sf::FloatRect GetActorGlobalBounds() const;
 
-		World* GetWorld() const { return m_owningWorld; };
+		const World* GetWorld() const { return m_owningWorld; };
+		World* GetWorld() { return m_owningWorld; };
+
 		bool IsActorOOB() const;
 		bool SetEnablePhysics(bool enable);
 		virtual void OnActorBeginOverlap(Actor* actor);
@@ -45,6 +47,9 @@ namespace ly
 		bool IsOtherHostile(Actor* other) const;
 
 		virtual void ApplyDamage(float amt);
+
+		sf::Sprite& GetSprite() { return m_sprite; };
+		const sf::Sprite& GetSprite() const { return m_sprite; };
 
 	private:
 		void InitializePhysics();
