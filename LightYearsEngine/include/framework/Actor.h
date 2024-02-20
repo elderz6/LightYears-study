@@ -35,7 +35,7 @@ namespace ly
 		const World* GetWorld() const { return m_owningWorld; };
 		World* GetWorld() { return m_owningWorld; };
 
-		bool IsActorOOB() const;
+		bool IsActorOOB(float allowance = 10.f) const;
 		bool SetEnablePhysics(bool enable);
 		virtual void OnActorBeginOverlap(Actor* actor);
 		virtual void OnActorEndOverlap(Actor* actor);

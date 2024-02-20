@@ -125,7 +125,7 @@ namespace ly
 	}
 
 
-	bool Actor::IsActorOOB() const
+	bool Actor::IsActorOOB(float allowance) const
 	{
 		float windowWidth = GetWorld()->GetWindowSize().x;
 		float windowHeight = GetWorld()->GetWindowSize().y;
@@ -135,19 +135,19 @@ namespace ly
 
 		sf::Vector2f actorPosition = GetActorLocation();
 		
-		if (actorPosition.x < -width)
+		if (actorPosition.x < -width - allowance)
 		{
 			return true;
 		}
-		if (actorPosition.x > windowWidth + width)
+		if (actorPosition.x > windowWidth + width + allowance)
 		{
 			return true;
 		}
-		if (actorPosition.y < -height)
+		if (actorPosition.y < -height - allowance)
 		{
 			return true;
 		}
-		if (actorPosition.y > windowHeight + height)
+		if (actorPosition.y > windowHeight + height + allowance)
 		{
 			return true;
 		}
@@ -184,6 +184,8 @@ namespace ly
 
 	bool Actor::IsOtherHostile(Actor* other) const
 	{
+		if (other == nullptr) return false;
+
 		if (GetTeamId() == GetNeutralTeamID() || other->GetTeamId() == GetNeutralTeamID())
 		{
 			return false;
