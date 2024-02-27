@@ -2,6 +2,7 @@
 #include "framework/Core.h"
 #include "framework/Actor.h"
 #include "framework/Application.h"
+#include "gameplay/GameStage.h"
 
 namespace ly
 {
@@ -9,7 +10,9 @@ namespace ly
 		: m_owningApp{ owningApp },
 		m_beginPlay{ false },
 		m_actors{},
-		m_pendingActors{}
+		m_pendingActors{},
+		m_currentStageIndex{-1},
+		m_gameStages{}
 	{
 
 	}
@@ -20,6 +23,8 @@ namespace ly
 		{
 			m_beginPlay = true;
 			BeginPlay();
+			InitGameStages();
+			NextGameStage();
 		}
 	}
 
@@ -37,6 +42,11 @@ namespace ly
 		{
 			iter->get()->TickInternal(deltaTime);
 			++iter;
+		}
+
+		if (m_currentStageIndex >= 0 && m_currentStageIndex < m_gameStages.size())
+		{
+			m_gameStages[m_currentStageIndex]->TickStage(deltaTime);
 		}
 
 		Tick(deltaTime);
@@ -69,6 +79,23 @@ namespace ly
 			}
 			else ++iter;
 		}
+
+		for (auto iter = m_gameStages.begin(); iter != m_gameStages.end();)
+		{
+			if (iter->get()->IsStageFinished())
+			{
+				iter = m_gameStages.erase(iter);
+			}
+			else
+			{
+				++iter;
+			}
+		}
+	}
+
+	void World::AddStage(const shared<GameStage> newStage)
+	{
+		m_gameStages.push_back(newStage);
 	}
 
 	void World::BeginPlay()
@@ -78,5 +105,27 @@ namespace ly
 	void World::Tick(float deltaTime)
 	{
 		//LOG("Ticking at framerate %f", 1.f / deltaTime);
+	}
+
+	void World::InitGameStages()
+	{
+	}
+
+	void World::AllGameStagesFinished()
+	{
+	}
+
+	void World::NextGameStage()
+	{
+		++m_currentStageIndex;
+		if (m_currentStageIndex >= 0 && m_currentStageIndex < m_gameStages.size())
+		{
+			m_gameStages[m_currentStageIndex]->onStageFinished.BindAction(GetWeakRef(), &World::NextGameStage);
+			m_gameStages[m_currentStageIndex]->StartStage();
+		}
+		else
+		{
+			AllGameStagesFinished();
+		}
 	}
 }

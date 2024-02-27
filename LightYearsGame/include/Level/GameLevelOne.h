@@ -15,5 +15,6 @@ namespace ly
 		virtual void BeginPlay() override;
 		void TimerCallback_test();
 		TimerHandle timerHandle;
+		virtual void InitGameStages() override;
 	};
 }
